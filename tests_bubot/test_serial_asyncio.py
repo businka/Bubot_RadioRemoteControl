@@ -22,9 +22,9 @@ def async_test(f):
 
 
 devices = {
-    'Кабинет левая':  '9a6d36d36db6d34db6924d26',  # 4d
+    'Кабинет левая': '9a6d36d36db6d34db6924d26',  # 4d
     'Кабинет правая': '9a6d36d34db6d34db6924d26',
-    'Спальня левая':  '9b4924d36db6da4d24924d26',
+    'Спальня левая': '9b4924d36db6da4d24924d26',
     'Спальня правая': '9b4924d34db6da4d24924d26',
     'Детская левая': '9a6d36d36db6934934924d26',
     'Детская правая': '9a6d36d34db6934934924d26',
@@ -52,30 +52,38 @@ class TestDooya(unittest.TestCase):
 
     @async_test
     async def test_receiver(self):
-        dooya_signature = BinarySignal.load_signature_from_file('../src/bubot/devices/DooyaCurtain433/signature.json')
+        signatures = [
+            BinarySignal.load_signature_from_file('../src/bubot/devices/DooyaCurtain433/signature.json'),
+        ]
         await self.open_port()
         while True:
-                data = await self.reader.readline()
-                data = data.decode()
-                pass
+            data = await self.reader.readline()
+            data = data.decode()
+            pass
+            try:
+                signal = BinarySignal()
                 try:
-                    signal = BinarySignal()
-                    try:
-                        res = signal.decode(data)
-                    except Exception as e:
-                        print('signal decode err', e)
-                        continue
-                    if res:
-                        res2 = signal.detect_signal(dooya_signature)
+                    res = signal.decode(data)
+                except KeyError:
+                    continue
+                except Exception as e:
+                    print('signal decode err', e)
+                    continue
+                if res:
+                    found = False
+                    for signature in signatures:
+                        res2 = signal.detect_signal(signature)
                         if res2:
+                            found = True
                             print(res2.n, res2.cmd, res2.di)
-                        else:
-                            print('{0:x}'.format(res))
-                    else:
-                        print(data)
+                    if not found:
+                        # print('{bit_length};{data:x}'.format(data=res, bit_length=signal.bit_length))
+                        print('{data:x}'.format(data=res, bit_length=signal.bit_length))
+                else:
+                    print(data)
 
-                except KeyError as e:
-                    print('err', str(e), data)
+            except KeyError as e:
+                print('err', str(e), data)
 
     def test_transmitter(self):
         # data = '111111111111111111000001000111010001110111010001110111011101000111011101110111011101110111010001110100011101110111011101000100010001000111010001000111010001110100011101000111010001110'
@@ -174,3 +182,33 @@ class TestDooya(unittest.TestCase):
         result = signal.decode(source)
         result1 = signal.detect()
         pass
+
+    @async_test
+    async def test_learn(self):
+        learn = dict()
+        hist = []
+        i = 0
+        await self.open_port()
+        while True:
+            data = await self.reader.readline()
+            data = data.decode()
+            pass
+            try:
+                signal = BinarySignal()
+                try:
+                    res = signal.decode(data)
+                    if res:
+                        i += 1
+                        if res not in learn:
+                            learn[res] = 0
+                        learn[res] += 1
+                        hist.append(res)
+                        print(i, learn[res], signal.bit_length, '{0:x}'.format(res))
+                except KeyError:
+                    continue
+                except Exception as e:
+                    print('signal decode err', e)
+                    continue
+
+            except KeyError as e:
+                print('err', str(e), data)

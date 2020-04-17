@@ -1,0 +1,16 @@
+{
+  "/oic/d": {
+    "n": "Universal radio button"
+  },
+  "/oic/p": {
+    "mnmn": "Bubot",
+    "mnml": "",
+    "mnmo": ""
+  },
+  "/button": {
+    "rt": [
+      "oic.r.switch.binary"
+    ],
+    "value": false
+  }
+}

@@ -23,9 +23,9 @@ class BinarySignal:
         self.cmd = kwargs.get('cmd', None)
         self.props = dict()
         self.bit_length = None
-        self.preamble_h = 0
+        # self.preamble_h = 0
         self.bits_count = 0
-        self.preamble_l = 0
+        # self.preamble_l = 0
         self.matched = 0
         self.props_count = 0
         self.driver = None
@@ -39,13 +39,13 @@ class BinarySignal:
         if len(data) < 7:
             raise KeyError('Bad signal: short')
         _data = [x[1] for x in data]
-        self.preamble_h = _data[0]
-        self.preamble_l = _data[1]
-        intervals = self.detect_fill_interval(_data[2:])  # без преамбулы
+        # self.preamble_h = _data[0]
+        # self.preamble_l = _data[1]
+        intervals = self.detect_fill_interval(_data)  # без преамбулы
         if not intervals:
             raise KeyError('Bad signal: not detect intervals')
-        self.bit_length = self._detect_bit_length(_data[2:], intervals)
-        bits = self.convert_to_bit(data[2:], self.bit_length) + '0'
+        self.bit_length = self._detect_bit_length(_data, intervals)
+        bits = self.convert_to_bit(data, self.bit_length) + '0'
         # self.bits_count = len(bits)
         self.data = int(bits, base=2)
         return self.data

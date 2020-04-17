@@ -1,6 +1,6 @@
 #include "Receiver.h"
 
-Receiver::Receiver(){}
+Receiver::Receiver() {}
 
 void Receiver::Setup()
 {
@@ -11,7 +11,7 @@ void Receiver::Setup()
 
 
 void Receiver::BeginReceive() {
-//  Serial.println("BeginReceive...");
+  //  Serial.println("BeginReceive...");
   previous = 0;
   msgStatus = 0;
   msgSizeL = 0;
@@ -34,8 +34,8 @@ void Receiver::BeginNewSignal(unsigned long mCurrent)
   msgSizeH = 0;
   msgStatus = 1;
   msgBegin = mCurrent;
-  AddBufferL(8000);
-  AddBufferH((unsigned int) (mCurrent - previous));
+  AddBufferL(maxSignal);
+  //  AddBufferH((unsigned int) (mCurrent - previous));
 }
 
 
@@ -52,15 +52,23 @@ void Receiver::InterruptLowToHigh()
     case 1:
       if (longMsg) // закончилось сообщение
       {
-        receiver.AddBufferL(0);
-        receiver.EndReceive(2);
-        break;
+        if (receiver.ItsTooSmall()) {
+          receiver.BeginNewSignal(mCurrent);
+          break;
+        } else {
+          receiver.AddBufferL(0);
+          receiver.EndReceive(2);
+          break;
+        }
       }
       else { // сообщение продолжается
         receiver.AddBufferL((unsigned int) (mCurrent - previous));
       }
       break;
     case 0:
+      if (longMsg && previous) {// начинаем новое
+        receiver.BeginNewSignal(mCurrent);
+      }
       break;
   }
   receiver.SetPrevious(mCurrent);
@@ -72,42 +80,30 @@ void Receiver::InterruptHighToLow()
   Receiver& receiver( Receiver::Instance() );
   unsigned long mCurrent = micros();
   unsigned long previous = receiver.GetPrevious();
-  bool longMsg = (mCurrent - previous) > receiver.GetMaxSignal();
   switch (receiver.GetMsgStatus())
   {
-    case 2:
-      break;
     case 1:
-      if (!longMsg ) { // продолжается текущее
+      receiver.AddBufferH((unsigned int) (mCurrent - previous));
+      break;
 
-        receiver.AddBufferH((unsigned int) (mCurrent - previous));
-        break;
-      }
-      // текущее сообщение ошибчное, встретили преамбулу начинаем заново
-      receiver.BeginNewSignal(mCurrent);
-      break;
-    case 0:
-      if (longMsg && previous) {// начинаем новое
-        receiver.BeginNewSignal(mCurrent);
-      }
-      break;
   }
   receiver.SetPrevious(mCurrent);
 }
 
-void Receiver::PrintBuffer(){
-      int i = 0;
-      String mOut = "";
-      for (i; i < msgSizeH; i++) {
-        mOut += "L";
-        mOut += String(bufferL[i]);
-        mOut += ";H";
-        mOut += String(bufferH[i]);
-        mOut += ";";
-      }
-      Serial.println(mOut);
+void Receiver::PrintBuffer() {
+  int i = 0;
+  //String mOut = String(msgStatus);
+  String mOut = "";
+  for (i; i < msgSizeH; i++) {
+    mOut += "L";
+    mOut += String(bufferL[i]);
+    mOut += ";H";
+    mOut += String(bufferH[i]);
+    mOut += ";";
   }
-  
+  Serial.println(mOut);
+}
+
 
 void Receiver::Loop()
 {
@@ -125,6 +121,7 @@ void Receiver::Loop()
     case 3:
       break;
     case 4:
+      PrintBuffer();
       BeginReceive();
       break;
 

@@ -95,7 +95,7 @@ class TestSerialBridgeToRadio(unittest.TestCase):
         self.config['/oic/con']['bridge']['eps'] = bridge_device.link['eps']
         self.device = Device.init_from_config(self.config, path=self.config_path)
         device_task = await wait_run_device(self.device)
-        message = OcfRequest(op='update', to=dict(href='/curtain'), cn=dict(openLevel=100))
+        message = OcfRequest(op='update', to=dict(href='/curtain'), cn=dict(openLevel=20))
         result = await self.device.on_post_request(message)
 
         bridge_task.cancel()

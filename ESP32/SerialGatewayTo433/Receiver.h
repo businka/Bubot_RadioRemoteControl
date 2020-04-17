@@ -17,6 +17,7 @@ class Receiver
     unsigned long SetPrevious(unsigned long newValue) { previous = newValue; }
     unsigned long GetMaxSignal() { return maxSignal; }
     unsigned long GetMsgStatus() { return msgStatus; }
+    unsigned long ItsTooSmall() { return msgSizeH < 5 ? true : false; }  // коротки сообщения игнорируем
     void AddBufferH(unsigned int value) { bufferH[msgSizeH++] = value; }    
     void AddBufferL(unsigned int value) { bufferL[msgSizeL++] = value; }    
 
@@ -35,7 +36,7 @@ class Receiver
     unsigned int msgStatus;
     unsigned long previous;
     unsigned long msgBegin;
-    static const int maxSignal = 4000;
+    static const int maxSignal = 8000;
     static const int LHDataPin = 32;
     static const int HLDataPin = 33;
 };

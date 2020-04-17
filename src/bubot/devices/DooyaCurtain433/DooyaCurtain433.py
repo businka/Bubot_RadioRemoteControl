@@ -19,7 +19,7 @@ class DooyaCurtain433(RadioDevice):
         new_level = message.cn.get('openLevel')
         current_level = self.get_param('/curtain', 'openLevel')
         change_level = new_level - current_level
-        open_time = 20  # время полного открытия в секундах
+        open_time = 25  # время полного открытия в секундах
         work_time = round(change_level * open_time / 100)
         if change_level > 0:  # вверх
             await self.send_cmd('up')

@@ -1,7 +1,7 @@
 [
   {
     "name": "data_tmpl",
-    "default": "{di}{cmd}"
+    "default": "1FFF0{di}{cmd}"
   },
   {
     "name": "n_tmpl",
