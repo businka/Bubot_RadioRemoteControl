@@ -1,0 +1,45 @@
+{
+  "id": "http://razgovorov.ru/bubot/schemas/bubot.modbus.msg-schema.json#",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "title": "configuration",
+  "definitions": {
+    "radio.msg": {
+      "type": "object",
+      "properties": {
+        "raw": {
+          "type": "string",
+          "default": "",
+          "description": "raw signal data"
+        },
+        "data": {
+          "type": "string",
+          "default": "",
+          "description": "decode signal data"
+        },
+        "title": {
+          "type": "string",
+          "default": "",
+          "description": "detect command"
+        },
+        "di": {
+          "type": "string",
+          "default": "",
+          "description": "radio device identificator"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "oic.core-schema.json#/definitions/oic.core"
+    },
+    {
+      "$ref": "#/definitions/radio.msg"
+    },
+    {
+      "$ref": "bubot.serial.con-schema.json#/definitions/serial.conf"
+    }
+  ]
+}

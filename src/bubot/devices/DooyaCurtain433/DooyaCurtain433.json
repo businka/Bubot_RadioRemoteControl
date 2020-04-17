@@ -1,0 +1,16 @@
+{
+  "/oic/d": {
+    "n": "Dooya Curtain"
+  },
+  "/oic/p": {
+    "mnmn": "Dooya",
+    "mnml": "",
+    "mnmo": ""
+  },
+  "/curtain": {
+    "rt": [
+      "oic.r.openlevel"
+    ],
+    "openLevel": 0
+  }
+}

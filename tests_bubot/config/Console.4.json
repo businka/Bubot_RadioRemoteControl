@@ -1,0 +1,9 @@
+{
+  "/oic/d": {
+    "di": "4"
+  },
+  "/oic/con": {
+    "logLevel": "info",
+    "udpCoapPort": 58089
+  }
+}

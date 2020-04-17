@@ -1,0 +1,12 @@
+{
+  "/oic/con": {
+    "rt": [
+      "bubot.radio.con"
+    ],
+    "bridge": {
+      "anchor": "",
+      "href": "/radio_msg",
+      "eps": []
+    }
+  }
+}

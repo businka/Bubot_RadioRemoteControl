@@ -1,0 +1,154 @@
+[
+  {
+    "name": "data_tmpl",
+    "default": "{di}{cmd}"
+  },
+  {
+    "name": "n_tmpl",
+    "default": "{manufacturer} {model}"
+  },
+  {
+    "name": "bit_length",
+    "min": 350,
+    "max": 360,
+    "default": 355
+  },
+  {
+    "name": "bits_count",
+    "min": 30,
+    "max": 30
+  },
+  {
+    "name": "preamble_h",
+    "min": 4690,
+    "max": 4750,
+    "default": 4730
+  },
+  {
+    "name": "preamble_l",
+    "min": 1390,
+    "max": 2000,
+    "default": 1433
+  },
+  {
+    "name": "manufacturer",
+    "position": [
+      -30,
+      -28
+    ],
+    "items": {
+      "Dooya": [
+        "9a"
+      ]
+    }
+  },
+  {
+    "name": "model",
+    "position": [
+      -30,
+      -22
+    ],
+    "unknown": true,
+    "items": {
+      "DC1651": [
+        "9a6d36d3",
+        "9b4924d3"
+      ],
+      "DC1653": [
+        "9a692693"
+      ]
+    }
+  },
+  {
+    "name": "di",
+    "unknown": true,
+    "position": [
+      -30,
+      -6
+    ]
+  },
+  {
+    "name": "address",
+    "unknown": true,
+    "position": [
+      -22,
+      -9
+    ]
+  },
+  {
+    "name": "channel",
+    "unknown": true,
+    "position": [
+      -9,
+      -6
+    ],
+    "items": {
+      "0": [
+        "924"
+      ],
+      "1": [
+        "926"
+      ],
+      "2": [
+        "934"
+      ],
+      "3": [
+        "936"
+      ],
+      "4": [
+        "9a4"
+      ],
+      "5": [
+        "9a6"
+      ],
+      "6": [
+        "9b4"
+      ],
+      "7": [
+        "9b6"
+      ],
+      "8": [
+        "d24"
+      ],
+      "9": [
+        "d26"
+      ],
+      "10": [
+        "d34"
+      ],
+      "11": [
+        "d36"
+      ],
+      "12": [
+        "da4"
+      ],
+      "13": [
+        "da6"
+      ],
+      "14": [
+        "db4"
+      ],
+      "15": [
+        "db6"
+      ]
+    }
+  },
+  {
+    "name": "cmd",
+    "position": [
+      -6,
+      null
+    ],
+    "items": {
+      "stop": [
+        "9a69a6"
+      ],
+      "up": [
+        "926926"
+      ],
+      "down": [
+        "936936"
+      ]
+    }
+  }
+]

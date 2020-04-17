@@ -1,0 +1,11 @@
+{
+  "/oic/d": {
+    "di": "6d350e5d-8b7c-459e-a671-e5860b318799"
+  },
+  "/oic/con": {
+    "logLevel": "debug",
+    "udpCoapPort": 61175,
+    "host": "COM3",
+    "baudRate": 115200
+  }
+}
