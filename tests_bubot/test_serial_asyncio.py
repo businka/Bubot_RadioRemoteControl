@@ -185,9 +185,12 @@ class TestDooya(unittest.TestCase):
 
     @async_test
     async def test_learn(self):
+        result = []
+        index = dict()
         learn = dict()
         hist = []
         i = 0
+        max = 20
         await self.open_port()
         while True:
             data = await self.reader.readline()
@@ -198,12 +201,22 @@ class TestDooya(unittest.TestCase):
                 try:
                     res = signal.decode(data)
                     if res:
-                        i += 1
-                        if res not in learn:
-                            learn[res] = 0
-                        learn[res] += 1
-                        hist.append(res)
-                        print(i, learn[res], signal.bit_length, '{0:x}'.format(res))
+                        if res not in index:
+                            result.append(
+                                dict(
+                                    data=data,
+                                    count=0,
+                                    bit_length=[]
+                                )
+                            )
+                            index[res] = i
+                            i += 1
+                        j = index[res]
+                        result[j]['count'] += 1
+                        result[j]['bit_length'].append(signal.bit_length)
+                        print(i, result[j]['count'], signal.bit_length, '{0:x}'.format(res))
+                        if result[index[res]]['count'] == max:
+                            break
                 except KeyError:
                     continue
                 except Exception as e:
@@ -212,3 +225,9 @@ class TestDooya(unittest.TestCase):
 
             except KeyError as e:
                 print('err', str(e), data)
+
+        learn = sorted(learn, key=lambda x: x['count'] - max)
+        i = 0
+        print(learn[i]['count'], learn[i]['data'], sum(learn[i]['bit_length']) / len(learn[i]['bit_length']))
+        i = 1
+        print(learn[i]['count'], learn[i]['data'], sum(learn[i]['bit_length']) / len(learn[i]['bit_length']))
